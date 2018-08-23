@@ -138,4 +138,6 @@ install_confirm
 download_file
 install_firewall
 install_mn
+echo "${yel}Getting informations ..."
+sleep 30
 footer
