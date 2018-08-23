@@ -13,7 +13,7 @@ wget -N https://raw.githubusercontent.com/GalaxyPool/roller-mn/master/roller_ins
 ```
 If you see your Masternode IP, Masternode PORT and Masternode ID. It mean you completed configuration your server.
 
-Go to [Roller CMS](https://wallet.roller.today) to submit your masternode.
+Go to [Roller CMS](http://wallet.roller.today) to submit your masternode.
 
 ----------------------------------------
 
