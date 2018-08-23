@@ -2,7 +2,7 @@
 
 ![banner](https://raw.githubusercontent.com/GalaxyPool/roller-mn/master/image/banner.png)
 
-Shell script to install a Kitty Masternode on a Linux server running Ubuntu 16.04. Use it on your own risk.
+Shell script này dùng để cài đặt Roller Masternode trên một máy chủ Linux chạy Ubuntu 16.04.
 
 **Khuyến cáo nên cài đặt script này trên Ubuntu 16.04 LTS.**
 
