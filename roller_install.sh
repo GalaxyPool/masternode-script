@@ -22,6 +22,11 @@ cat << _banner
   ║ /___/_/|_/___/ /_/ /_/ |_/____/____/       https://fb.com/duyk16  ║
   ║                                                                   ║
   ╚═══════════════════════════════════════════════════════════════════╝
+           1) INSTALL MASTERNODE
+           2) MASTERNODE INFORMATIONS
+           3) MASTERNODE STATUS
+           4) REMOVE OLD FILE
+           5) EXIT
 _banner
 echo -n $end
 }
@@ -39,19 +44,72 @@ if [[ $EUID -ne 0 ]]; then
 fi
 }
 
+function choice() {
+  read -r -p "  ${yel}Enter your choice [1-5]: $end" choice
+  if [ $choice = 1 ];
+  then
+    download_file
+    install_firewall
+    install_mn
+    echo "${yel}Getting informations ..."
+    sleep 10
+    footer
+  elif [ $choice = 2 ];
+  then
+    footer
+  elif [ $choice = 3 ];
+  then
+	systemctl status masternode.service
+	read -r -p "  ${yel}Back to menu [y/n]: $end" back
+    case "$back" in
+         [yY][eE][sS]|[yY])
+          menu
+             ;;
+         *)
+             exit
+             ;;
+    esac
+  elif [ $choice = 4 ];
+  then
+    echo "  ${yel}Removing old file ..."
+    systemctl stop masternode.service
+    rm -rf /root/geth-linux-amd64.zip
+    rm -rf /root/geth-linux-amd64/
+    rm -rf /usr/sbin/geth
+    rm -rf /root/tools.sh
+    rm -rf /tmp/masternode.service
+    rm -rf /root/.roller/
+    rm -rf /etc/systemd/system/masternode.service
+    echo "  ${yel}Remove complete"
+	read -r -p "  Back to menu [y/n]: $end" back
+    case "$back" in
+         [yY][eE][sS]|[yY])
+          menu
+             ;;
+         *)
+             exit
+             ;;
+    esac
+  elif [ $choice = 5 ];
+  then
+	exit
+  else
+    echo " ${yel} You must choice from 1-4. ${end}"
+  fi
+}
+
 # FOOTER
 footer () {
 clear
-echo -n $gre
+echo -n $gre && echo
 cat << _success
-  *********************************************************************
-  *--------------------- SUCCESS CONFIGURATION -----------------------*
-  *********************************************************************
+  --------------------- SUCCESS CONFIGURATION -----------------------
 _success
 echo
 echo "  ${red}Masternode IP:${end} $(curl -s4 api.ipify.org)"
 echo "  ${red}Masternode PORT:${end} $(journalctl -u masternode.service | grep 'HTTP endpoint opened' | awk '{print $11}' | awk '{print $1}' | grep -o -P '(?<=http://0.0.0.0:).*' | tail -1)"
 echo "  ${red}Masternode ID:${end} $(journalctl -u masternode.service | grep 'UDP listener up' | awk '{print $11}' | grep -o -P '(?<=node://).*(?=@)' | tail -1)"
+echo -n $yel && echo
 cat << _information
      /- This script only work with Ubuntu 16.04 x64
      /- Script made by Duy Nguyen
@@ -60,36 +118,20 @@ cat << _information
            * ETH/ETC: 0xBEB1B4ae55A1C0873c60947724Ae8b58B7Def191
            * ROLLER: 0x0eead76e3edd5a09879a42aeb00eacbb77d641b4
 _information
-echo -n $end
+echo -n $gre && echo
+echo "  -----------------------------------------------------------------"
+echo -n $end && echo
+read -r -p " ${yel}Back to menu [y/n]: $end" back
+case "$back" in
+     [yY][eE][sS]|[yY])
+      menu
+         ;;
+     *)
+         exit
+         ;;
+esac
 }
 
-
-# install confirm
-function install_confirm() {
-    # call with a prompt string or use a default
-    read -r -p " ${yel}Do you want install script ? [y/n] $end" confirm
-    case "$confirm" in
-        [yY][eE][sS]|[yY])
-            true
-            ;;
-        *)
-            exit
-            ;;
-    esac
-}
-
-# reboot  confirm
-function reboot_confirm() {
-    read -r -p " ${yel}Confirm reboot? [y/n]} ${end}" confirm
-    case "$confirm" in
-        [yY][eE][sS]|[yY])
-            reboot
-            ;;
-        *)
-            false
-            ;;
-    esac
-}
 function download_file() {
     read -r -p " ${yel}Do you want to download needed file (no if you did it before)? [y/n] ${end}" confirm
     case "$confirm" in
@@ -133,12 +175,11 @@ sudo \mv /tmp/masternode.service /etc/systemd/system
 sudo systemctl enable masternode && systemctl start masternode
 }
 
-display_banner
-checks_ubuntu
-install_confirm
-download_file
-install_firewall
-install_mn
-echo "${yel}Getting informations ..."
-sleep 30
-footer
+function menu() {
+  clear
+  display_banner
+  checks_ubuntu
+  choice
+}
+
+menu
