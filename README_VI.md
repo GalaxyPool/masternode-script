@@ -14,6 +14,7 @@ chmod +x roller_install.sh
 ./roller_install.sh
 ```
 Nếu bạn nhìn thấy các thông số Masternode IP, Masternode PORT và Masternode ID nghĩa là bạn đã cài đặt thành công.
+Check lại 1 lần nữa với lựa chọn 3 trong script nếu bạn thấy chữ **Active** là masternode service đã hoạt động.
 
 truy cập [Roller CMS](http://wallet.roller.today) để tiếp tục đăng ký Roller Masternode.
 
