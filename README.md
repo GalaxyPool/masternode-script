@@ -14,6 +14,7 @@ chmod +x roller_install.sh
 ./roller_install.sh
 ```
 If you see your Masternode IP, Masternode PORT and Masternode ID. It mean you completed configuration your server.
+Check again with option 3 in script. Showing **Active** in green means masternode service working. 
 
 Go to [Roller CMS](http://wallet.roller.today) to submit your masternode.
 
