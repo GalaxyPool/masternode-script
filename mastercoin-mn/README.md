@@ -1,4 +1,4 @@
-## How to use Roller Masternode script
+## How to use Mastercoin Masternode script
 
 ![banner](https://raw.githubusercontent.com/GalaxyPool/masternode-script/develop/mastercoin-mn/image/banner.png)
 
