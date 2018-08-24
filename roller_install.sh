@@ -53,10 +53,8 @@ read -r -p "  ${yel}Enter your choice [1-5]: $end" choice
   if [ $choice = 1 ];
   then
     systemctl stop masternode.service
-    rm -rf /root/geth-linux-amd64.zip
     rm -rf /root/geth-linux-amd64/
     rm -rf /usr/sbin/geth
-    rm -rf /root/tools.sh
     rm -rf /tmp/masternode.service
     rm -rf /root/.roller/
     rm -rf /etc/systemd/system/masternode.service
