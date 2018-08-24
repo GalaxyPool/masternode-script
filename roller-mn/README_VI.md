@@ -1,6 +1,6 @@
 ## Cách sử dụng Roller Masternode script
 
-![banner](https://raw.githubusercontent.com/GalaxyPool/roller-mn/master/image/banner.png)
+![banner](https://raw.githubusercontent.com/GalaxyPool/masternode-script/master/roller-mn/image/banner.png)
 
 Shell script này dùng để cài đặt Roller Masternode trên một máy chủ Linux chạy Ubuntu 16.04.
 
@@ -9,7 +9,7 @@ Shell script này dùng để cài đặt Roller Masternode trên một máy ch�
 ## Cách cài đặt
 
 ```
-wget -N https://raw.githubusercontent.com/GalaxyPool/roller-mn/master/roller_install.sh
+wget -N https://raw.githubusercontent.com/GalaxyPool/masternode-script/master/roller-mn/roller_masternode.sh
 chmod +x roller_install.sh
 ./roller_install.sh
 ```

@@ -1,5 +1,5 @@
 ### How to use Roller Masternode script
-![banner](https://raw.githubusercontent.com/GalaxyPool/roller-mn/master/image/banner.png)
+![banner](https://raw.githubusercontent.com/GalaxyPool/masternode-script/master/roller-mn/image/banner.png)
 
 Shell script to install a Kitty Masternode on a Linux server running Ubuntu 16.04. Use it on your own risk.
 
@@ -7,7 +7,7 @@ Shell script to install a Kitty Masternode on a Linux server running Ubuntu 16.0
 
 ### Installation
 ```
-wget -N https://raw.githubusercontent.com/GalaxyPool/roller-mn/master/roller_install.sh
+wget -N https://raw.githubusercontent.com/GalaxyPool/roller-mn/master/roller_masternode.sh
 bash kittycoin_install.sh
 ```
 If you see your Masternode IP, Masternode PORT and Masternode ID. It mean you completed configuration your server.
