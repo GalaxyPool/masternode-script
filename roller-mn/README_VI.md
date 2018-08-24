@@ -11,7 +11,7 @@ Shell script này dùng để cài đặt Roller Masternode trên một máy ch�
 ```
 wget -N https://raw.githubusercontent.com/GalaxyPool/masternode-script/master/roller-mn/roller_masternode.sh
 chmod +x roller_masternode.sh
-./roller_install.sh
+./roller_masternode.sh
 ```
 Nếu bạn nhìn thấy các thông số Masternode IP, Masternode PORT và Masternode ID nghĩa là bạn đã cài đặt thành công.
 Check lại 1 lần nữa với lựa chọn 3 trong script nếu bạn thấy chữ **Active** là masternode service đã hoạt động.
