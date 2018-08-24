@@ -49,7 +49,7 @@ function choice() {
            6) EXIT
 _choice
 	echo -n $end  
-	read -r -p "  ${yel}Enter your choice [1-5]: $end" choice
+	read -r -p "  ${yel}Enter your choice [1-6]: $end" choice
 	if [ $choice = 1 ]; then
 		systemctl stop masternode.service
 		remove_file
