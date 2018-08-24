@@ -1,6 +1,6 @@
 ## How to use Roller Masternode script
 
-![banner](https://raw.githubusercontent.com/GalaxyPool/masternode-script/master/mastercoin-mn/image/banner.png)
+![banner](https://raw.githubusercontent.com/GalaxyPool/masternode-script/develop/mastercoin-mn/image/banner.png)
 
 Shell script to install a Roller Masternode on a Linux server running Ubuntu 16.04. Use it on your own risk.
 
@@ -9,15 +9,10 @@ Shell script to install a Roller Masternode on a Linux server running Ubuntu 16.
 ## Installation
 
 ```
-wget -N https://raw.githubusercontent.com/GalaxyPool/masternode-script/master/mastercoin-mn/mastercoin_masternode.sh
-chmod +x roller_masternode.sh
-./roller_masternode.sh
+wget -N https://raw.githubusercontent.com/GalaxyPool/masternode-script/develop/mastercoin-mn/mastercoin_masternode.sh
+chmod +x mastercoin_masternode.sh
+./mastercoin_masternode.sh
 ```
-If you see your Masternode IP, Masternode PORT and Masternode ID. It mean you completed configuration your server.
-Check again with option 3 in script. Showing **Active** in green means masternode service working.
-
-Go to [Roller CMS](http://wallet.roller.today) to submit your masternode.
-
 ----------------------------------------
 
 ## Donations
