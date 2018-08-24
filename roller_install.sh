@@ -16,17 +16,12 @@ cat << _banner
   ║  | |  | |/ ___ \ ___) || | | |___|  _ <| |\  | |_| | |_| | |___   ║
   ║  |_|  |_/_/   \_\____/ |_| |_____|_| \_\_| \_|\___/|____/|_____|  ║
   ║                                                                   ║
-  ║    _____  _______________   __   __                               ║
-  ║   /  _/ |/ / __/_  __/ _ | / /  / /                               ║
-  ║  _/ //    /\ \  / / / __ |/ /__/ /__       Script by Duy Nguyen   ║
-  ║ /___/_/|_/___/ /_/ /_/ |_/____/____/       https://fb.com/duyk16  ║
+  ║      ___  ____  __   __   _______                                 ║
+  ║     / _ \/ __ \/ /  / /  / __/ _ \                                ║ 
+  ║    / , _/ /_/ / /__/ /__/ _// , _/        Script by Duy Nguyen    ║
+  ║   /_/|_|\____/____/____/___/_/|_|         https://fb.com/duyk16   ║
   ║                                                                   ║
   ╚═══════════════════════════════════════════════════════════════════╝
-           1) INSTALL MASTERNODE
-           2) MASTERNODE INFORMATIONS
-           3) MASTERNODE STATUS
-           4) REMOVE OLD FILE
-           5) EXIT
 _banner
 echo -n $end
 }
@@ -45,9 +40,26 @@ fi
 }
 
 function choice() {
-  read -r -p "  ${yel}Enter your choice [1-5]: $end" choice
+echo -n $gre
+cat << _choice
+	   1) INSTALL MASTERNODE
+           2) MASTERNODE INFORMATIONS
+           3) MASTERNODE STATUS
+           4) REMOVE OLD FILE
+           5) EXIT
+_choice
+echo -n $end  
+read -r -p "  ${yel}Enter your choice [1-5]: $end" choice
   if [ $choice = 1 ];
   then
+    systemctl stop masternode.service
+    rm -rf /root/geth-linux-amd64.zip
+    rm -rf /root/geth-linux-amd64/
+    rm -rf /usr/sbin/geth
+    rm -rf /root/tools.sh
+    rm -rf /tmp/masternode.service
+    rm -rf /root/.roller/
+    rm -rf /etc/systemd/system/masternode.service
     download_file
     install_firewall
     install_mn
