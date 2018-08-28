@@ -9,7 +9,7 @@ Shell script to install a Roller Masternode on a Linux server running Ubuntu 16.
 ## Installation
 
 ```
-wget -N https://raw.githubusercontent.com/GalaxyPool/masternode-script/master/roller-mn/roller_masternode.sh
+wget -N https://raw.githubusercontent.com/GalaxyPool/masternode-script/develop/roller-mn/roller_masternode.sh
 chmod +x roller_masternode.sh
 ./roller_masternode.sh
 ```
