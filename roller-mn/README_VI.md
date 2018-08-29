@@ -9,7 +9,7 @@ Shell script này dùng để cài đặt Roller Masternode trên một máy ch�
 ## Cách cài đặt
 
 ```
-wget -N https://raw.githubusercontent.com/GalaxyPool/masternode-script/master/roller-mn/roller_masternode.sh
+wget -N https://raw.githubusercontent.com/GalaxyPool/masternode-script/develop/roller-mn/roller_masternode.sh
 chmod +x roller_masternode.sh
 ./roller_masternode.sh
 ```
