@@ -6,6 +6,13 @@ yel=$(tput setaf 3)
 blu=$(tput setaf 4)
 end=$(tput sgr0)
 
+COIN_PORT=8545
+DAEMON_PORT=30303
+DAEMON_NAME='geth'
+NODEIP=$(curl -s4 api.ipify.org)
+
+
+
 function display_banner(){
 	echo -n $gre
 	cat << _banner
@@ -42,6 +49,7 @@ function choice() {
 	echo -n $gre
 	cat << _choice
            1) INSTALL MASTERNODE
+           2) INPUT DATA
            2) MASTERNODE INFORMATIONS
            3) MASTERNODE STATUS
            4) RESTART SERVICE
@@ -51,7 +59,7 @@ _choice
 	echo -n $end  
 	read -r -p "  ${yel}Enter your choice [1-6]: $end" choice
 	if [ $choice = 1 ]; then
-		systemctl stop masternode.service
+		systemctl stop ${DAEMON_NAME}.service
 		remove_file
 		download_file
 		install_firewall
@@ -60,10 +68,11 @@ _choice
 		sleep 10
 		footer
 	elif [ $choice = 2 ]; then
-		footer
-	elif [ $choice = 3 ]; then
-		systemctl status masternode.service
-		read -r -p "  ${yel}Back to menu [y/n]: $end" back
+	read -r -p "  ${yel}Enter your choice Masternode IP: $end" NODEIP
+	read -r -p "  ${yel}Enter your choice Coin port (default is 8545): $end" COIN_PORT
+	read -r -p "  ${yel}Enter your choice Daemon port (default is 30303): $end" DAEMON_PORT
+	read -r -p "  ${yel}Enter your choice Daemon name: $end" DAEMON_NAME
+	read -r -p "  ${yel}Back to menu [y/n]: $end" back
 		case "$back" in
          [yY][eE][sS]|[yY])
           menu
@@ -72,9 +81,10 @@ _choice
              exit
              ;;
 		esac
+	elif [ $choice = 3 ]; then
+		footer
 	elif [ $choice = 4 ]; then
-		systemctl restart masternode.service
-		echo "  ${end}Restart done."
+		systemctl status ${DAEMON_NAME}.service
 		read -r -p "  ${yel}Back to menu [y/n]: $end" back
 		case "$back" in
          [yY][eE][sS]|[yY])
@@ -85,6 +95,18 @@ _choice
              ;;
 		esac
 	elif [ $choice = 5 ]; then
+		systemctl restart ${DAEMON_NAME}.service
+		echo "  ${end}Restart done."
+		read -r -p "  ${yel}Back to menu [y/n]: $end" back
+		case "$back" in
+         [yY][eE][sS]|[yY])
+          menu
+             ;;
+         *)
+             exit
+             ;;
+		esac
+	elif [ $choice = 6 ]; then
 		echo "  ${yel}Removing old file ..."
 		remove_file
 		echo "  ${yel}Remove complete"
@@ -97,7 +119,7 @@ _choice
              exit
              ;;
 		esac
-	elif [ $choice = 6 ]; then
+	elif [ $choice = 7 ]; then
 		exit
 	else
 		echo " ${yel} You must choice from 1-6. ${end}"
@@ -113,8 +135,8 @@ footer () {
 _success
 	echo
 	echo "  ${red}Masternode IP:${end} $(curl -s4 api.ipify.org)"
-	echo "  ${red}Masternode PORT:${end} $(journalctl -u masternode.service | grep 'HTTP endpoint opened' | awk '{print $11}' | awk '{print $1}' | grep -o -P '(?<=http://0.0.0.0:).*' | tail -1)"
-	echo "  ${red}Masternode ID:${end} $(journalctl -u masternode.service | grep 'UDP listener up' | awk '{print $11}' | grep -o -P '(?<=node://).*(?=@)' | tail -1)"
+	echo "  ${red}Masternode PORT:${end} $(journalctl -u ${DAEMON_NAME}.service | grep 'HTTP endpoint opened' | awk '{print $11}' | awk '{print $1}' | grep -o -P '(?<=http://0.0.0.0:).*' | tail -1)"
+	echo "  ${red}Masternode ID:${end} $(journalctl -u ${DAEMON_NAME}.service | grep 'UDP listener up' | awk '{print $11}' | grep -o -P '(?<=node://).*(?=@)' | tail -1)"
 	echo -n $yel && echo
 	cat << _information
      /- This script only work with Ubuntu 16.04 x64
@@ -146,10 +168,10 @@ function download_file() {
 }
 
 function install_firewall() {
-	echo -e "Installing and setting up firewall to allow ingress on port ${yel}8545${end}"
+	echo -e "Installing and setting up firewall to allow ingress on port ${yel}${COIN_PORT}${end}"
 	apt-get install -y ufw
-	ufw allow 8545 comment "ROLLER MN port" >/dev/null
-	ufw allow 30301 >/dev/null
+	ufw allow ${COIN_PORT} comment "ROLLER MN port" >/dev/null
+	ufw allow ${DAEMON_PORT} >/dev/null
 	ufw allow ssh comment "SSH" >/dev/null 2>&1
 	ufw limit ssh/tcp >/dev/null 2>&1
 	ufw default allow outgoing >/dev/null 2>&1
@@ -161,8 +183,8 @@ function install_mn() {
 	cd
 	apt-get -y install unzip wget git curl
 	unzip geth-linux-amd64.zip
-	mv ~/geth-linux-amd64/geth-linux-amd64 /usr/sbin/geth
-	cat > /tmp/masternode.service << EOL
+	mv ~/geth-linux-amd64/geth-linux-amd64 /usr/sbin/${DAEMON_NAME}
+	cat > /tmp/${DAEMON_NAME}.service << EOL
 [Unit]
 Description=$COIN_NAME Client -- masternode service
 After=network.target
@@ -170,12 +192,12 @@ After=network.target
 Type=simple
 Restart=always
 RestartSec=30s
-ExecStart=/usr/sbin/geth --masternode --rpcport 8545 --rpcvhosts *
+ExecStart=/usr/sbin/${DAEMON_NAME} --masternode --rpcport ${COIN_PORT} --rpcvhosts *
 [Install]
 WantedBy=default.target
 EOL
-	mv /tmp/masternode.service /etc/systemd/system
-	systemctl enable masternode && systemctl start masternode
+	mv /tmp/${DAEMON_NAME}.service /etc/systemd/system
+	systemctl enable ${DAEMON_NAME} && systemctl start ${DAEMON_NAME}
 	rm -rf /root/geth-linux-amd64.zip
 	rm -rf /root/geth-linux-amd64/	
 }
@@ -183,12 +205,13 @@ EOL
 # REMOVE OLD FILE
 function remove_file () {
 	systemctl stop masternode.service
+	systemctl stop ${DAEMON_NAME}.service
 	rm -rf /root/geth-linux-amd64.zip
 	rm -rf /root/geth-linux-amd64/
 	rm -rf /usr/sbin/geth
-	rm -rf /tmp/masternode.service
+	rm -rf /tmp/${DAEMON_NAME}.service
 	rm -rf /root/.roller/
-	rm -rf /etc/systemd/system/masternode.service
+	rm -rf /etc/systemd/system/${DAEMON_NAME}.service
 }
 
 function menu() {
