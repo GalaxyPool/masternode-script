@@ -17,8 +17,13 @@ function display_banner(){
   ║  |_|  |_/_/   \_\____/ |_| |_____|_| \_\_| \_|\___/|____/|_____|  ║
   ║                                                                   ║
   ║      ___  ____  __   __   _______                                 ║
+<<<<<<< HEAD
   ║     / _ \/ __ \/ /  / /  / __/ _ \                                ║
   ║    / , _/ /_/ / /__/ /__/ _// , _/        Script by Galaxy Pool   ║
+=======
+  ║     / _ \/ __ \/ /  / /  / __/ _ \                                ║ 
+  ║    / , _/ /_/ / /__/ /__/ _// , _/        Script by GalaxyPool    ║
+>>>>>>> 6cf8025091007479e671cbae256e85374435985a
   ║   /_/|_|\____/____/____/___/_/|_|         https://fb.com/duyk16   ║
   ║                                                                   ║
   ╚═══════════════════════════════════════════════════════════════════╝
@@ -118,7 +123,7 @@ _success
 	echo -n $yel && echo
 	cat << _information
      /- This script only work with Ubuntu 16.04 x64
-     /- Script made by Duy Nguyen
+     /- Script made by Galaxy Pool
      /- Contact: fb.com/duyk16
      /- Donations:
            * ETH/ETC: 0xBEB1B4ae55A1C0873c60947724Ae8b58B7Def191
