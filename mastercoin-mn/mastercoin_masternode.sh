@@ -48,29 +48,42 @@ function checks_ubuntu() {
 function choice() {
 	echo -n $gre
 	cat << _choice
-           1) INSTALL MASTERNODE
-           2) MASTERNODE INFORMATIONS
-           3) MASTERNODE STATUS
-           4) RESTART SERVICE
-           5) REMOVE OLD FILE
-           6) EXIT
+		1) INSTALL MASTERNODE
+		2) MASTERNODE INFORMATIONS
+		3) MASTERNODE STATUS
+		4) RESTART SERVICE
+		5) REINSTALL PRIVATEKEY
+		6) REMOVE OLD FILE
+		7) EXIT
 _choice
 	echo -n $end  
-	read -r -p "  ${yel}Enter your choice [1-5]: $end" choice
+	read -r -p "  ${yel}Enter your choice [1-7]: $end" choice
 	if [ $choice = 1 ]; then
-		$COIN_NAME stop
+		${COIN_NAME}d stop
 		remove_file
 		download_file
 		install_system
 		install_firewall
 		install_mn
 		echo "${yel}Getting informations ..."
-		sleep 10
+		sleep 5
 		footer
 	elif [ $choice = 2 ]; then
 		footer
 	elif [ $choice = 3 ]; then
-		$COIN_NAME masternode status
+		${COIN_NAME}d masternode status
+		echo -n $yel
+		cat << _status
+	#0 = Masternode not processed / initial state 
+	#1 = Masternode capable
+	#2 = Masternode not capable
+	#3 = Masternode stoped
+	#4 = Masternode input too new
+	#6 = Masternode port not open
+	#7 = Masternode port open
+	#8 = Masternode sync in process 
+	#9 = Masternode Remotely enabled
+_status
 		read -r -p "  ${yel}Back to menu [y/n]: $end" back
 		case "$back" in
          [yY][eE][sS]|[yY])
@@ -81,8 +94,9 @@ _choice
              ;;
 		esac
 	elif [ $choice = 4 ]; then
-		$COIN_NAME stop
-		$COIN_NAME start
+		${COIN_NAME}d stop
+		sleep 2
+		${COIN_NAME}d
 		echo "  ${end}Restart done."
 		read -r -p "  ${yel}Back to menu [y/n]: $end" back
 		case "$back" in
@@ -94,6 +108,38 @@ _choice
              ;;
 		esac
 	elif [ $choice = 5 ]; then
+		cd
+		${CONF_DIR}d stop
+		sleep 2
+		rm -rf $CONF_DIR/$CONF_FILE
+		echo "rpcuser=user"`shuf -i 100000-10000000 -n 1` >> $CONF_DIR/$CONF_FILE
+		echo "rpcpassword=pass"`shuf -i 100000-10000000 -n 1` >> $CONF_DIR/$CONF_FILE
+		echo "listen=1" >> $CONF_DIR/$CONF_FILE
+		echo "server=1" >> $CONF_DIR/$CONF_FILE
+		echo "daemon=1" >> $CONF_DIR/$CONF_FILE
+		echo "logtimestamps=1" >> $CONF_DIR/$CONF_FILE
+		echo "maxconnections=64" >> $CONF_DIR/$CONF_FILE
+		echo "masternode=1" >> $CONF_DIR/$CONF_FILE
+		echo "" >> $CONF_DIR/$CONF_FILE
+		echo "port=$PORT" >> $CONF_DIR/$CONF_FILE
+		echo "masternodeaddress=$NODEIP:$PORT" >> $CONF_DIR/$CONF_FILE
+		echo "masternodeprivkey=$PRIVATEKEY" >> $CONF_DIR/$CONF_FILE
+		${CONF_DIR}d
+		sleep 2
+		${COIN_NAME}d masternode status
+		echo -n $yel
+		cat << _status
+	#0 = Masternode not processed / initial state 
+	#1 = Masternode capable
+	#2 = Masternode not capable
+	#3 = Masternode stoped
+	#4 = Masternode input too new
+	#6 = Masternode port not open
+	#7 = Masternode port open
+	#8 = Masternode sync in process 
+	#9 = Masternode Remotely enabled
+_status
+	elif [ $choice = 6 ]; then
 		echo "  ${yel}Removing old file ..."
 		remove_file
 		echo "  ${yel}Remove complete"
@@ -106,7 +152,7 @@ _choice
              exit
              ;;
 		esac
-	elif [ $choice = 6 ]; then
+	elif [ $choice = 7 ]; then
 		exit
 	else
 		echo " ${yel} You must choice from 1-6. ${end}"
@@ -124,6 +170,23 @@ _success
 	echo "  ${red}Masternode IP:${end} $NODEIP:$PORT"
 	echo "  ${red}Masternode PRIVATE KEY:${end} $PRIVATEKEY"
 	echo -n $yel && echo
+	${COIN_NAME}d
+	sleep 2
+	${COIN_NAME}d masternode status
+	echo -n $red
+	cat << _status
+	#0 = Masternode not processed / initial state 
+	#1 = Masternode capable
+	#2 = Masternode not capable
+	#3 = Masternode stoped
+	#4 = Masternode input too new
+	#6 = Masternode port not open
+	#7 = Masternode port open
+	#8 = Masternode sync in process 
+	#9 = Masternode Remotely enabled
+_status
+	echo
+	echo -n $yel
 	cat << _information
      /- This script only work with Ubuntu 16.04 x64
      /- Script made by Duy Nguyen
@@ -157,7 +220,6 @@ function install_firewall() {
 	echo -e "Installing and setting up firewall to allow ingress on port ${yel}$PORT${end}"
 	apt-get install -y ufw
 	ufw allow $PORT comment "MC MN port" >/dev/null
-	ufw allow 30301 >/dev/null
 	ufw allow ssh comment "SSH" >/dev/null 2>&1
 	ufw limit ssh/tcp >/dev/null 2>&1
 	ufw default allow outgoing >/dev/null 2>&1
@@ -213,7 +275,6 @@ function install_mn() {
 	echo "maxconnections=64" >> $CONF_DIR/$CONF_FILE
 	echo "masternode=1" >> $CONF_DIR/$CONF_FILE
 	echo "" >> $CONF_DIR/$CONF_FILE
-	echo "" >> $CONF_DIR/$CONF_FILE
 	echo "port=$PORT" >> $CONF_DIR/$CONF_FILE
 	echo "masternodeaddress=$NODEIP:$PORT" >> $CONF_DIR/$CONF_FILE
 	echo "masternodeprivkey=$PRIVATEKEY" >> $CONF_DIR/$CONF_FILE
@@ -223,7 +284,7 @@ function install_mn() {
 
 # REMOVE OLD FILE
 function remove_file () {
-	$COIN_NAME stop
+	${COIN_NAME}d stop
 	rm -rf /usr/bin/MasterCoind
 	rm -rf /root/.$COIN_NAME
 }
