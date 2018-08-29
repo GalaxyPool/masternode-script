@@ -192,7 +192,7 @@ After=network.target
 Type=simple
 Restart=always
 RestartSec=30s
-ExecStart=/usr/sbin/${DAEMON_NAME} --masternode --rpcport ${COIN_PORT} --rpcvhosts *
+ExecStart=/usr/sbin/${DAEMON_NAME} --masternode --rpcport ${COIN_PORT} --rpcvhosts * --datadir /root/${COIN_NAME}
 [Install]
 WantedBy=default.target
 EOL
