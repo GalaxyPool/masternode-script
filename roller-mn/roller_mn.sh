@@ -50,11 +50,11 @@ function choice() {
 	cat << _choice
            1) INSTALL MASTERNODE
            2) INPUT DATA
-           2) MASTERNODE INFORMATIONS
-           3) MASTERNODE STATUS
-           4) RESTART SERVICE
-           5) REMOVE OLD FILE
-           6) EXIT
+           3) MASTERNODE INFORMATIONS
+           4) MASTERNODE STATUS
+           5) RESTART SERVICE
+           6) REMOVE OLD FILE
+           7) EXIT
 _choice
 	echo -n $end  
 	read -r -p "  ${yel}Enter your choice [1-6]: $end" choice
