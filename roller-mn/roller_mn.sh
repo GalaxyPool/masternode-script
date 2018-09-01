@@ -134,7 +134,7 @@ footer () {
   --------------------- SUCCESS CONFIGURATION -----------------------
 _success
 	echo
-	echo "  ${red}Masternode IP:${end} $(curl -s4 api.ipify.org)"
+	echo "  ${red}Masternode IP:${end} ${NODEIP}"
 	echo "  ${red}Masternode PORT:${end} $(journalctl -u ${DAEMON_NAME}.service | grep 'HTTP endpoint opened' | awk '{print $11}' | awk '{print $1}' | grep -o -P '(?<=http://0.0.0.0:).*' | tail -1)"
 	echo "  ${red}Masternode ID:${end} $(journalctl -u ${DAEMON_NAME}.service | grep 'UDP listener up' | awk '{print $11}' | grep -o -P '(?<=node://).*(?=@)' | tail -1)"
 	echo -n $yel && echo
